@@ -4,7 +4,7 @@ import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
 
 
-const emailRedurec = (state, action) => {
+const emailReducer = (state, action) => {
     if(action.type === 'USER_INPUT') return {value: action.val, isValid: action.val.includes('@')};
     if(action.type === 'INPUT_BLUR') return {value: state.value, isValid: state.value.includes('@')}
 
@@ -25,7 +25,7 @@ const Login = (props) => {
     //const [passwordIsValid, setPasswordIsValid] = useState();
     const [formIsValid, setFormIsValid] = useState(false);
 
-    const [emailState, dispatchEmail] = useReducer(emailRedurec, {
+    const [emailState, dispatchEmail] = useReducer(emailReducer, {
         value: '',
         isValid: false
     });
@@ -39,12 +39,14 @@ const Login = (props) => {
         console.log('test1')
     }, []);
 
-    /*
+    const {isValid: emailIsValid} = emailState;
+    const {isValid: passwordIsValid} = passwordState;
+
     useEffect(() => {
         const timer = setTimeout(() => {
             console.log('Checking')
             setFormIsValid(
-                enteredEmail.includes('@') && enteredPassword.trim().length > 6
+                emailState.isValid && passwordState.isValid
             );
         }, 500);
 
@@ -53,8 +55,7 @@ const Login = (props) => {
             clearTimeout(timer);
         }
        
-    }, [enteredEmail, enteredPassword]);
-    */
+    }, [emailIsValid, passwordIsValid]);
 
     const emailChangeHandler = (event) => {
         dispatchEmail({
@@ -62,7 +63,7 @@ const Login = (props) => {
             val: event.target.value
         });
 
-        setFormIsValid(emailState.isValid && passwordState.isValid);
+        //setFormIsValid(emailState.isValid && passwordState.isValid);
     };
 
     const passwordChangeHandler = (event) => {
@@ -73,7 +74,7 @@ const Login = (props) => {
             val: event.target.value
         });
 
-        setFormIsValid(emailState.isValid && passwordState.isValid);
+        //setFormIsValid(emailState.isValid && passwordState.isValid);
     };
 
     const validateEmailHandler = () => {
